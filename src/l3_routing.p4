@@ -444,7 +444,7 @@ control MyIngress(inout headers hdr,
             /* 2. Set the source IP address to the IP of the ingress port
                   using table icmp_ingerss_port_ip */
             send_ICMP_error(ICMP_TYPE_TIME_EXCEEDED, 0);
-            icmp_ingerss_port_ip.apply();
+            icmp_ingress_port_ip.apply();
             
         }
         /* Check whether the packet's destination is router */
@@ -461,11 +461,11 @@ control MyIngress(inout headers hdr,
             }
             else {
                 if (hdr.ipv4.proto == IPV4_TCP || hdr.ipv4.proto == IPV4_UDP) {
-                    send_ICMP_error(ICMP_TYPE_DEST_UNREACHABLE, ICMP_CODE_DEST_UNREACHABLE);
+                    send_ICMP_error(ICMP_TYPE_DEST_UNREACHABLE, ICMP_CODE_PORT_UNREACHABLE);
                 }
-            }
-            else {
-                drop();
+                else {
+                    drop();
+                }
             }
         }
         /* Check if the packet is an ARP packet*/
@@ -526,7 +526,7 @@ control MyIngress(inout headers hdr,
                     hdr.original_icmp.setValid();
                     copy_icmp(hdr.icmp, hdr.original_icmp);
                 } 
-                send_ICMP_error(ICMP_TYPE_DEST_UNREACHABLE, ICMP_CODE_NET_UNREACHABLE);
+                send_ICMP_error(ICMP_TYPE_DEST_UNREACHABLE, ICMP_CODE_PORT_UNREACHABLE);
                 icmp_ingress_port_ip.apply();
             }
         }
