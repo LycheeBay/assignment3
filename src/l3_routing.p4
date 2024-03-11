@@ -351,6 +351,17 @@ control MyIngress(inout headers hdr,
               Change the dest MAC to the original packet's src MAC 
               Then set the src MAC to sndMAC */
         /* 3. Set egress_spec to the ingress_port */
+
+        hdr.arp.op     = ARP_OP_REPLY;
+        hdr.arp.sndMAC = sndMAC;
+        ipAddr_t tmp   = hdr.arp.sndIP;
+        hdr.arp.sndIP  = hdr.arp.tgtIP;
+        hdr.arp.tgtIP  = tmp;
+
+        hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
+        hdr.ethernet.srcAddr = sndMAC;
+
+        standard_metadata.egress_spec = standard_metadata.ingress_port;
     }
     
     action clone_packet() {
