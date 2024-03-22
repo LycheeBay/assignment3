@@ -404,7 +404,7 @@ control MyIngress(inout headers hdr,
             forward_to_port;
             drop;
         }
-        size = 024;
+        size = 1024;
         default_action = drop;
     }
 
