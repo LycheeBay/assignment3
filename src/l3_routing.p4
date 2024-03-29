@@ -467,7 +467,7 @@ control MyIngress(inout headers hdr,
             /* send an ICMP port unreachable msg using action send_ICMP_error */  
             /* 3. Otherwise, drop the packet */
 
-            if (hdr.ipv4.proto == IPV4_ICMP) {
+            if (hdr.icmp.type == ICMP_TYPE_ECHO) {
                 send_ICMP_echo_reply();
             }
             else {
